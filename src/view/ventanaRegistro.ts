@@ -49,15 +49,13 @@ namespace view {
                     this.ventana.style("left", `${left}px`).style("top", `${top}px`);
                 })(this.ventana);
         }
-    
+
         mostrar() {
             this.ventana.style("display", "block");
         }
-    
         ocultar() {
             this.ventana.style("display", "none");
         }
-    
         obtenerContenedor() {  
             return this.contenedorClase;
         }

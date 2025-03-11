@@ -12,89 +12,115 @@ namespace view {
     public PersonasMap: Map<number, Persona> = new Map();
     private ventana = new view.Ventana();
     ordenAscendenteNombre = true;
-    private inputbusqueda: d3.Selection<HTMLInputElement, unknown, HTMLElement, any>;
+    OrdenAscendenteApellido = true;
+    OrdenAscendenteEdad = true;
+    OrdenAscendenteCorreo = true;
+    OrdenAscendenteTelefono = true;
+    OrdenAscendenteFechaN = true;
+    inputbusqueda: d3.Selection<HTMLInputElement, unknown, HTMLElement, any>;
 
+    private OrdenaNombre() {
+      this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+        return this.ordenAscendenteNombre ? a[1].nombre.localeCompare(b[1].nombre) : b[1].nombre.localeCompare(a[1].nombre);
+      }));
+      this.ordenAscendenteNombre = !this.ordenAscendenteNombre;
+      this.lista();
+    }
+    private OrdenaApellido() {
+        this.PersonasMap =  new Map([...this.PersonasMap.entries()].sort((a,b) => {
+          return this.OrdenAscendenteApellido ? a[1].apellido.localeCompare(b[1].apellido) : b[1].apellido.localeCompare(a[1].apellido); 
+        }))
+        this.OrdenAscendenteApellido = !this.OrdenAscendenteApellido;
+        this.lista();
+    }
+    private OrdenaEdad() {
+        this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+          return this.OrdenAscendenteEdad ? a[1].edad - b[1].edad : b[1].edad -a[1].edad;
+        }));
+        this.OrdenAscendenteEdad = !this.OrdenAscendenteEdad;
+        this.lista();
+    }
+    private OrdenaCorreo() {
+      this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+        return this.OrdenAscendenteCorreo ? a[1].correo.localeCompare(b[1].correo) : b[1].correo.localeCompare(a[1].correo);
+      }));
+      this.OrdenAscendenteCorreo = !this.OrdenAscendenteCorreo;
+        this.lista();
+    }
+    private OrdenaTelefono() {
+      this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+        return this.OrdenAscendenteTelefono ? a[1].telefono - b[1].telefono : b[1].telefono - a[1].telefono;
+      }));
+      this.OrdenAscendenteTelefono = !this.OrdenAscendenteTelefono;
+        this.lista();
+    }
+    private OrdenaFechaN() {
+      this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+        return this.OrdenAscendenteFechaN ? new Date(a[1].fechaN).getTime() - new Date(b[1].fechaN).getTime() : new Date(b[1].fechaN).getTime() - new Date(a[1].fechaN).getTime();
+      }));
+      this.OrdenAscendenteFechaN = !this.OrdenAscendenteFechaN;
+        this.lista();
+    }
+    
     private async VerPersonasApi() {
       try {
         let data: Persona[] = await d3.json("https://raw.githubusercontent.com/05JesusMoreno/json_document/refs/heads/main/src/view/personas.json");
         data.forEach((persona) => {
           this.PersonasMap.set(persona.id, persona);
         });
-        this.lista()
+        this.lista();
       } catch (error) {
         console.error("Error al obtener datos:", error);
       }
     }
     constructor(container: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) {
-      this.mostrarLista(container);
+      this.mostrarLista(container); 
     }
     public mostrarLista(container: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) {
-      container.append("h2").text("Lista de Personas Registradas").attr("id","ContenedorLista");
-      container.exit().remove();
-      this.VerPersonasApi();
       var busqueda = container
         .append("div")
-        .style("width", "80%")
-        .style("display", "flex")
-        .style("justify-content", "flex-start")
-        .style("margin-bottom", "10px");
+        .attr("class", "busqueda");
       this.inputbusqueda = busqueda
         .append("input")
         .attr("type", "text")
         .attr("placeholder", "Buscar Persona")
         .style("border-radius", "5px")
-        .style("font-size", "16px")
+        .style("font-size", "24px")
         .on("keyup", () => {
           this.lista()
         });
       var buttonContainer = container
         .append("div")
-        .style("width", "80%")
+        .style("width", "45%")
         .style("display", "flex")
         .style("justify-content", "flex-end")
         .style("margin-bottom", "10px");
       buttonContainer
         .append("button")
         .text("Agregar Persona")
-        .style("padding", "8px 12px")
-        .style("background-color", "#4CAF50")
-        .style("color", "white")
-        .style("border", "none")
-        .style("cursor", "pointer")
-        .style("border-radius", "5px")
-        .style("font-size", "18px")
+        .attr("class","agregar")
         .on("click", () => {
           var container_reg = this.ventana.obtenerContenedor();
           this.formulario(container_reg, null);
           this.ventana.mostrar();
-        });
+        });   
+
+      container.append("h2").text("Lista de Personas Registradas")
+      .attr("id","ContenedorLista")
+      .attr("class", "h2")
+      this.VerPersonasApi();
     }
-    private lista(){
+    public lista(){
       d3.select("#ContenedorLista").select("table").remove();
-      var tabla = d3.select("#ContenedorLista").append("table");
-      
+      var tabla = d3.select("#ContenedorLista").append("table").attr("class", "tabla");
       let data = Array.from(this.PersonasMap.values());
-      
       var texto = this.inputbusqueda?.property("value").toLowerCase();
       if (texto != " ") {
         data = data.filter(
           (persona) =>
-            persona.nombre.toLowerCase().includes(texto) ||
-            persona.apellido.toLowerCase().includes(texto)
-            
+            persona.nombre.toLowerCase().includes(texto)
         );
       }
-      data = data.sort((a, b) =>
-        this.ordenAscendenteNombre
-          ? a.edad - b.edad 
-          : b.edad- a.edad 
-      );
-      data = data.sort((a, b) =>
-        this.ordenAscendenteNombre
-          ? a.nombre.localeCompare(b.nombre)
-          : b.nombre.localeCompare(a.nombre)
-      );
-      this.ordenAscendenteNombre = !this.ordenAscendenteNombre;
 
       tabla.selectAll("tr")
           .data([["Id", "Nombre", "Apellidos", "Edad", "Correo", "Telefono", "Fecha de nacimiento", "Editar", "Eliminar"]]) 
@@ -105,51 +131,61 @@ namespace view {
           .enter()
           .append("th")
           .text(d => d)
-          .on("click", () => {
-            this.lista();
-          });
-  
+          .each((d, i, nodes) => {
+            d3.select(nodes[i]).style("cursor","pointer").on("click", () => {
+                switch (d) {
+                    case "Nombre":
+                        this.OrdenaNombre();
+                        break;
+                    case "Apellidos":
+                        this.OrdenaApellido();
+                        break;
+                    case "Edad":
+                        this.OrdenaEdad();
+                        break;
+                    case "Correo":
+                        this.OrdenaCorreo();
+                        break;
+                    case "Telefono":
+                        this.OrdenaTelefono();
+                        break;
+                    case "Fecha de nacimiento":
+                        this.OrdenaFechaN();
+                        break;
+                    default:
+                        this.lista();
+                        break;
+                }
+            });
+        });
       let filas = tabla.selectAll("tr")
-          .data(data); 
-               
-      filas.exit().remove();  
+      .data(data); 
+      filas.exit().remove();
       let filas_nuevas = filas.enter().append("tr");
-  
+      
       filas_nuevas.selectAll("td")
           .data(d => [d.id, d.nombre, d.apellido, d.edad, d.correo, d.telefono, d.fechaN ? new Date(d.fechaN).toLocaleDateString() : '' ])
           .enter()
           .append("td")
           .text(d => d);
-      filas_nuevas.append("td")
-          .append("button")
+      filas_nuevas.append("td").append("button")
           .text("Editar")
-          .style("background-color", "#3A0AD5")
-          .style("color", "white")
-          .style("cursor", "pointer")
-          .style("padding", "5px 10px")
+          .attr("class","editarBtn")
           .on("click", (event, d) => {
               let container_edit = this.ventana.obtenerContenedor();
               this.formulario(container_edit, d);
               this.ventana.mostrar();
           });
-      filas_nuevas.append("td")
-          .append("button")
+      filas_nuevas.append("td").append("button")
           .text("Eliminar")
-          .style("background-color", "red")
-          .style("color", "white")
-          .style("cursor", "pointer")
-          .style("padding", "5px 10px")
+          .attr("class","cancelar")
           .on("click", (event, d) => {
-              this.eliminar(d.id);
+              this.eliminar(d.id); 
           });
       d3.selectAll("th")
-        .style("border", "1px solid black")
-        .style("text-align", "center")
-        .style("font-size", "22px");
+        .attr("class","th")
       d3.selectAll("td")
-        .style("border", "1px solid black")
-        .style("text-align", "center")
-        .style("font-size", "22px");
+        .attr("class","tr")
   }
     private formulario(container_form: d3.Selection<d3.BaseType, unknown, HTMLElement, any>, persona: Persona | null = null) {
       container_form.selectAll("*").remove();
@@ -158,32 +194,32 @@ namespace view {
 
       container_form.append("label").text("Nombre");
       var inputNombre = container_form.append("input")
-        .attr("type", "text")
+        .attr("type", "text").attr("class","input")
         .property("value", persona ? persona.nombre : "");
 
       container_form.append("label").text("Apellidos");
       var inputApellidos = container_form.append("input")
-        .attr("type", "text")
+        .attr("type", "text").attr("class","input")
         .property("value", persona ? persona.apellido : "");
 
       container_form.append("label").text("Edad");
       var inputEdad = container_form
-        .append("input").attr("type", "number")
+        .append("input").attr("type", "number").attr("class","input")
         .property("value", persona ? persona.edad : "");
 
       container_form.append("label").text("Correo");
       var inputEmail = container_form.append("input")
-        .attr("type", "email")
+        .attr("type", "email").attr("class","input")
         .property("value", persona ? persona.correo : "");
 
       container_form.append("label").text("Teléfono");
       var inputTelefono = container_form.append("input")
-        .attr("type", "number")
+        .attr("type", "number").attr("class","input")
         .property("value", persona ? persona.telefono : "");
 
       container_form.append("label").text("Fecha de nacimiento");
       var inputFechaN = container_form.append("input")
-        .attr("type", "date")
+        .attr("type", "date").attr("class","input")
         .property("value", persona ? new Date(persona.fechaN).toISOString().split("T")[0] : "");
 
       var buttonContainer = container_form.append("div")
@@ -195,12 +231,7 @@ namespace view {
       buttonContainer.append("button")
         .text(persona ? "Actualizar" : "Registrar")
         .style("background-color", persona ? "#FFA500" : "#4CAF50")
-        .style("color", "white")
-        .style("border", "none")
-        .style("cursor", "pointer")
-        .style("border-radius", "5px")
-        .style("font-size", "20px")
-        .style("padding", "8px")
+        .attr("class","actualizar")
         .on("click", () => {
           var nombre = inputNombre.property("value");
           var apellidos = inputApellidos.property("value");
@@ -208,7 +239,6 @@ namespace view {
           var correo = inputEmail.property("value");
           var telefono = inputTelefono.property("value");
           var fechaN = new Date(inputFechaN.property("value"));
-
           if (nombre && apellidos && edad > 0 && correo && telefono && fechaN) {
             if (persona) {
               persona.nombre = nombre;
@@ -220,7 +250,7 @@ namespace view {
               alert("Persona actualizada correctamente");
             } else {
               var id = this.PersonasMap.size > 0 ? Math.max(...Array.from(this.PersonasMap.keys())) + 1 : 1;
-              this.PersonasMap.set(id, { id, nombre, apellido: apellidos, edad, correo, telefono, fechaN });
+              this.PersonasMap.set(id, { id, nombre, apellido: apellidos, edad, correo, telefono, fechaN});
               alert("Persona agregada correctamente");
             }
             this.lista();
@@ -231,34 +261,42 @@ namespace view {
         });
       buttonContainer.append("button")
         .text("Cancelar")
-        .style("background-color", "red")
-        .style("color", "white")
-        .style("border", "none")
-        .style("cursor", "pointer")
-        .style("border-radius", "5px")
-        .style("font-size", "20px")
-        .style("padding", "8px")
+        .attr("class","cancelar")
         .on("click", () => {
           this.ventana.ocultar();
         });
-      d3.selectAll("input").style("width", "60%").style("font-size", "20px").style("padding", "10px");
       d3.selectAll("label").style("font-size", "18px").style("padding", "8px");
     }
     private eliminar(id: number) {
-      const confirmar = window.confirm(
-        "¿Estás seguro de que deseas eliminar a esta persona?"
-      );
-      if (!confirmar) {
-        alert("Cancelaste eliminar a esta persona");
-        return;
-      }
-      if (this.PersonasMap.delete(id)) {
-        alert(`Eliminaste a la persona con ID ${id}.`);
-       this.lista()
-        console.log(`Persona con ID ${id} eliminada.`);
-      } else {
-        console.log(`No se encontró la persona con ID ${id}.`);
-      }
+      var MensajeEliminar = this.ventana.obtenerContenedor();
+      MensajeEliminar.selectAll("*").remove();
+      MensajeEliminar.append("h3").text("Eliminar Persona");
+      MensajeEliminar.append("p").text(`¿Estás seguro de eliminar a la persona con ID ${id}?`);
+      this.ventana.mostrar()
+      MensajeEliminar.append("div")
+        .style("display", "flex")
+        .style("justify-content", "center")
+        .style("gap", "10px")
+        .style("margin-top", "10px")
+      MensajeEliminar.select("div").append("button")
+        .text("Eliminar")     
+        .attr("class","cancelar")
+        .on("click", () => {
+          if (this.PersonasMap.delete(id)) {
+            alert(`Eliminaste a la persona con ID ${id}.`);
+            this.lista();
+            this.ventana.ocultar();
+            console.log(`Persona con ID ${id} eliminada.`);
+          } else {
+            console.log(`No se encontró la persona con ID ${id}.`);
+          }
+        });
+      MensajeEliminar.select("div").append("button")
+        .text("Cancelar")
+        .attr("class","cancela")
+        .on("click", () => {
+          this.ventana.ocultar();
+        });
     }
   }
 }

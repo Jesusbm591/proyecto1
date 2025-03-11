@@ -1,0 +1,87 @@
+body{
+    font-family: Arial, sans-serif;
+}
+
+.busqueda {
+    width: 45%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.table {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+p {
+    font-size: 24px;
+}
+.cancelar{
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 8px;
+}  
+
+.cancela{
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 8px;
+}  
+.editarBtn{
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 8px;
+}
+.agregar{
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 8px;
+}  
+.actualizar{
+   color: white;
+   border: none;
+   cursor: pointer;
+   border-radius: 5px;
+   font-size: 20px;
+   padding: 8px;
+}
+.th{
+    border: 1px solid black;
+    text-align: center;
+    font-size: 22px;
+}
+.tr{
+    border: 1px solid black;
+    text-align: center;
+    font-size: 22px;
+}
+.h2{
+    font-size: 28px;
+    text-align: center;
+}
+
+.input{
+    width: 60%;
+    font-size: 20px;
+    padding: 10px; 
+}
+.encabezado {
+    cursor: pointer;
+}
