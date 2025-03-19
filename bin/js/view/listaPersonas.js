@@ -10,52 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var view;
 (function (view) {
     class VerPersonas {
-        OrdenaNombre() {
-            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
-                return this.ordenAscendenteNombre ? a[1].nombre.localeCompare(b[1].nombre) : b[1].nombre.localeCompare(a[1].nombre);
-            }));
-            this.ordenAscendenteNombre = !this.ordenAscendenteNombre;
-            this.lista();
-        }
-        OrdenaApellido() {
-            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
-                return this.OrdenAscendenteApellido ? a[1].apellido.localeCompare(b[1].apellido) : b[1].apellido.localeCompare(a[1].apellido);
-            }));
-            this.OrdenAscendenteApellido = !this.OrdenAscendenteApellido;
-            this.lista();
-        }
-        OrdenaEdad() {
-            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
-                return this.OrdenAscendenteEdad ? a[1].edad - b[1].edad : b[1].edad - a[1].edad;
-            }));
-            this.OrdenAscendenteEdad = !this.OrdenAscendenteEdad;
-            this.lista();
-        }
-        OrdenaCorreo() {
-            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
-                return this.OrdenAscendenteCorreo ? a[1].correo.localeCompare(b[1].correo) : b[1].correo.localeCompare(a[1].correo);
-            }));
-            this.OrdenAscendenteCorreo = !this.OrdenAscendenteCorreo;
-            this.lista();
-        }
-        OrdenaTelefono() {
-            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
-                return this.OrdenAscendenteTelefono ? a[1].telefono - b[1].telefono : b[1].telefono - a[1].telefono;
-            }));
-            this.OrdenAscendenteTelefono = !this.OrdenAscendenteTelefono;
-            this.lista();
-        }
-        OrdenaFechaN() {
-            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
-                return this.OrdenAscendenteFechaN ? new Date(a[1].fechaN).getTime() - new Date(b[1].fechaN).getTime() : new Date(b[1].fechaN).getTime() - new Date(a[1].fechaN).getTime();
-            }));
-            this.OrdenAscendenteFechaN = !this.OrdenAscendenteFechaN;
-            this.lista();
-        }
         VerPersonasApi() {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
-                    let data = yield d3.json("https://raw.githubusercontent.com/05JesusMoreno/json_document/refs/heads/main/src/view/personas.json");
+                    const response = yield fetch("http://localhost:64795/Service1.svc/ObtenerPersonas", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    if (!response.ok) {
+                        throw new Error("Error al obtener datos: " + response.statusText);
+                    }
+                    let data = yield response.json();
                     data.forEach((persona) => {
                         this.PersonasMap.set(persona.id, persona);
                     });
@@ -132,22 +99,46 @@ var view;
                 d3.select(nodes[i]).style("cursor", "pointer").on("click", () => {
                     switch (d) {
                         case "Nombre":
-                            this.OrdenaNombre();
+                            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+                                return this.ordenAscendenteNombre ? a[1].nombre.localeCompare(b[1].nombre) : b[1].nombre.localeCompare(a[1].nombre);
+                            }));
+                            this.ordenAscendenteNombre = !this.ordenAscendenteNombre;
+                            this.lista();
                             break;
                         case "Apellidos":
-                            this.OrdenaApellido();
+                            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+                                return this.OrdenAscendenteApellido ? a[1].apellido.localeCompare(b[1].apellido) : b[1].apellido.localeCompare(a[1].apellido);
+                            }));
+                            this.OrdenAscendenteApellido = !this.OrdenAscendenteApellido;
+                            this.lista();
                             break;
                         case "Edad":
-                            this.OrdenaEdad();
+                            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+                                return this.OrdenAscendenteEdad ? a[1].edad - b[1].edad : b[1].edad - a[1].edad;
+                            }));
+                            this.OrdenAscendenteEdad = !this.OrdenAscendenteEdad;
+                            this.lista();
                             break;
                         case "Correo":
-                            this.OrdenaCorreo();
+                            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+                                return this.OrdenAscendenteCorreo ? a[1].correo.localeCompare(b[1].correo) : b[1].correo.localeCompare(a[1].correo);
+                            }));
+                            this.OrdenAscendenteCorreo = !this.OrdenAscendenteCorreo;
+                            this.lista();
                             break;
                         case "Telefono":
-                            this.OrdenaTelefono();
+                            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+                                return this.OrdenAscendenteTelefono ? a[1].telefono - b[1].telefono : b[1].telefono - a[1].telefono;
+                            }));
+                            this.OrdenAscendenteTelefono = !this.OrdenAscendenteTelefono;
+                            this.lista();
                             break;
                         case "Fecha de nacimiento":
-                            this.OrdenaFechaN();
+                            this.PersonasMap = new Map([...this.PersonasMap.entries()].sort((a, b) => {
+                                return this.OrdenAscendenteFechaN ? new Date(a[1].fechaN).getTime() - new Date(b[1].fechaN).getTime() : new Date(b[1].fechaN).getTime() - new Date(a[1].fechaN).getTime();
+                            }));
+                            this.OrdenAscendenteFechaN = !this.OrdenAscendenteFechaN;
+                            this.lista();
                             break;
                         default:
                             this.lista();

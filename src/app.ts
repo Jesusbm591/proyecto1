@@ -16,8 +16,9 @@ namespace App {
             .style("width", "80%")
             .style("height", "auto")
             .style("padding", "2%");
+            
         new view.Inicio(container_body);
         }
     }
 }
-new App.app()
+new App.app();

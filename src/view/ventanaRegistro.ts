@@ -8,7 +8,6 @@ namespace view {
                 .style("position", "fixed")
                 .style("top", "50%")
                 .style("left", "50%")
-                .style("transform", "translate(-50%, -50%)")
                 .style("width", "500px")
                 .style("height", "700px")
                 .style("background-color", "lightgrey")
