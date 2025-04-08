@@ -11,9 +11,13 @@ var view;
                 .style("flex-direction", "column")
                 .style("width", "100%");
             container_inicio.append("p")
-                .text("Bienvenidos")
+                .text("Bienvenidos a Consumiendo Servicio Rest")
                 .style("font-size", "30px")
                 .style("text-align", "center");
+            container_inicio.append("img")
+                .attr("src", "../bin/images/Rest.png")
+                .attr("width", 700)
+                .attr("height", 500);
         }
     }
     view.Inicio = Inicio;

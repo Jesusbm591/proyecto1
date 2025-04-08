@@ -20,7 +20,7 @@ var Module;
                 new view.Inicio(d3.select("#container_body"));
             });
             container_header.select("div").append("button")
-                .text("Ver Personas")
+                .text("Personas")
                 .on("click", () => {
                 var vista = d3.select("#container_body").html("");
                 new view.VerPersonas(vista);

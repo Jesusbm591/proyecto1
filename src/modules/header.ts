@@ -12,7 +12,6 @@ namespace Module {
                 .style("justify-content", "center")
                 .style("align-items", "center")
                 .style("gap", "20px");
-
             container_header.select("div").append("button")
                 .text("Inicio")
                 .on("click", () => {
@@ -20,7 +19,7 @@ namespace Module {
                     new view.Inicio(d3.select("#container_body"));
                 });
             container_header.select("div").append("button")
-                .text("Ver Personas")
+                .text("Personas")
                 .on("click", () => {
                     var vista = d3.select("#container_body").html("");
                     new view.VerPersonas(vista);

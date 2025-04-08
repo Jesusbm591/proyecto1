@@ -1,8 +1,8 @@
-body{
-    font-family: Arial, sans-serif;
+body {
+    font-family: Arial sans-serif;
 }
 .busqueda {
-    width: 45%;
+    width: 60%;
     display: flex;
     justify-content: flex-start;
     margin-bottom: 10px;
@@ -51,6 +51,7 @@ p {
     border-radius: 5px;
     font-size: 20px;
     padding: 8px;
+    display: flex;
 }  
 .actualizar{
    color: white;
@@ -82,4 +83,24 @@ p {
 }
 .encabezado {
     cursor: pointer;
+}
+
+.estadoBtn {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.activo {
+    background-color: green;
+    color: white;
+}
+
+.inactivo {
+    background-color: rgb(255, 115, 0);
+    color: white;
+}
+.fila-inactiva {
+    background-color: #e99c29cb; 
+    color: #0e0d0d;
 }
